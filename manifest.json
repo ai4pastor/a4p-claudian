@@ -1,10 +1,10 @@
 {
-  "id": "realclaudian",
-  "name": "Claudian",
+  "id": "a4p-claudian",
+  "name": "A4P Claudian",
   "version": "2.0.34",
   "minAppVersion": "1.7.2",
-  "description": "Embeds Claude Code, Codex, and other coding agents as AI collaborators in your vault. Your vault becomes their working directory, giving them capabilities for file reads and writes, search, bash commands, and multi-step workflows.",
-  "author": "Yishen Tu",
-  "authorUrl": "https://github.com/YishenTu",
+  "description": "목회자를 위한 AI 동역자 — 옵시디언 안에서 Claude Code·Codex와 채팅하며 노트 읽기·쓰기, 검색, 다단계 사역 작업을 수행합니다. (yishentu/claudian 포크)",
+  "author": "AI4Pastor",
+  "authorUrl": "https://ai4pastor.com",
   "isDesktopOnly": true
 }

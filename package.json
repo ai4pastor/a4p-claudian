@@ -1,7 +1,7 @@
 {
-  "name": "claudian",
+  "name": "a4p-claudian",
   "version": "2.0.34",
-  "description": "Claudian - Claude Code embedded in Obsidian sidebar",
+  "description": "A4P Claudian - 목회자용 Claude Code/Codex 옵시디언 플러그인 (fork of yishentu/claudian)",
   "main": "main.js",
   "engines": {
     "node": ">=24 <25"
