@@ -1,7 +1,20 @@
-# Claudian
+# A4P Claudian
 
-![GitHub stars](https://img.shields.io/github/stars/YishenTu/claudian?style=social)
-![GitHub release](https://img.shields.io/github/v/release/YishenTu/claudian)
+> **[yishentu/claudian](https://github.com/yishentu/claudian) 포크** — 목회자(AI4Pastor 수강생)를 위해 한국어 UI, 스킬 스토어, 환경 진단, 사역 워크플로우 프리셋을 더한 커스텀 버전입니다. 원본의 훌륭한 작업은 Yishen Tu님께 감사드립니다. (MIT License)
+
+**설치 (BRAT)**: 커뮤니티 플러그인에서 [BRAT](https://github.com/TfTHacker/obsidian42-brat)를 설치한 뒤, BRAT 설정 → *Add Beta Plugin* → `ai4pastor/a4p-claudian` 입력.
+
+**원본과의 차이**
+- 🇰🇷 한국어 기본 UI + 간편 모드 (목회자에게 필요한 것만)
+- 🛍️ 스킬 스토어 — 터미널 없이 스킬 원클릭 설치/업데이트/제거
+- 🩺 환경 진단 — Claude CLI 설치·로그인·버전 호환성을 한국어로 안내
+- ⚡ 사역 워크플로우 프리셋 — 설교 준비, 성경 구절 찾기 등 버튼 한 번으로 시작
+- Claude Code + Codex에 집중 (OpenCode·Pi 숨김)
+
+---
+
+# Claudian (원본 README)
+
 ![License](https://img.shields.io/github/license/YishenTu/claudian)
 
 ![Preview](assets/Preview.png)
