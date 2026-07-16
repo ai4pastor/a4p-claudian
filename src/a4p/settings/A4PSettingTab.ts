@@ -8,7 +8,7 @@ import { getA4PStore } from '../context';
 import { DiagnosticsModal } from '../diagnostics/DiagnosticsModal';
 import { PresetEditModal } from '../presets/PresetEditModal';
 import { PresetManager } from '../presets/PresetManager';
-import { applySimpleModeToOpenTabs } from '../simplemode/simpleMode';
+import { applySimpleModeToOpenTabs, pruneGeneralTabForSimpleMode } from '../simplemode/simpleMode';
 import { SkillStoreModal } from '../skillstore/SkillStoreModal';
 import { a4pT } from '../strings';
 
@@ -48,13 +48,20 @@ export class A4PSettingTab extends ClaudianSettingTab {
       containerEl.querySelectorAll<HTMLElement>(':scope > .claudian-settings-tab-content'),
     );
     const tabIds = ['general', ...ProviderRegistry.getRegisteredProviderIds()];
+    const simpleMode = getA4PStore()?.get().simpleMode ?? true;
 
     tabIds.forEach((id, index) => {
-      if (A4P_HIDDEN_PROVIDER_IDS.has(id)) {
+      const hideAlways = A4P_HIDDEN_PROVIDER_IDS.has(id);
+      const hideInSimpleMode = simpleMode && id !== 'general';
+      if (hideAlways || hideInSimpleMode) {
         upstreamButtons[index]?.addClass('claudian-hidden');
         upstreamContents[index]?.addClass('claudian-hidden');
       }
     });
+
+    if (simpleMode && upstreamContents[0]) {
+      pruneGeneralTabForSimpleMode(upstreamContents[0]);
+    }
 
     const a4pButton = tabBar.createEl('button', {
       cls: 'claudian-settings-tab',
@@ -114,6 +121,7 @@ export class A4PSettingTab extends ClaudianSettingTab {
               data.simpleMode = value;
             });
             applySimpleModeToOpenTabs(this.plugin, value);
+            this.display();
           });
       });
 

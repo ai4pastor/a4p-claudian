@@ -9,6 +9,7 @@ import { syncCompatBanner } from './diagnostics/compatBanner';
 import type { CompatVerdict } from './diagnostics/CompatGuard';
 import { detectCliVersion, evaluateCompat, fetchCompatManifest } from './diagnostics/CompatGuard';
 import { DiagnosticsModal } from './diagnostics/DiagnosticsModal';
+import { NoticeTranslator } from './notices/NoticeTranslator';
 import { attachPresetChips } from './presets/PresetChips';
 import { PresetManager } from './presets/PresetManager';
 import { applySimpleModeToTab } from './simplemode/simpleMode';
@@ -52,6 +53,10 @@ export async function installA4P(plugin: A4PHost): Promise<void> {
     safeRegister(() => {
       presetManager = null;
     });
+
+    const noticeTranslator = new NoticeTranslator();
+    noticeTranslator.start();
+    safeRegister(() => noticeTranslator.stop());
 
     setA4PTabDecorator({ decorateTab: (tab) => decorateTab(plugin, tab) });
     safeRegister(() => setA4PTabDecorator(null));
