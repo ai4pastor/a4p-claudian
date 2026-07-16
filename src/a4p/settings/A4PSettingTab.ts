@@ -7,6 +7,7 @@ import type { A4PHost } from '../context';
 import { getA4PStore } from '../context';
 import { DiagnosticsModal } from '../diagnostics/DiagnosticsModal';
 import { applySimpleModeToOpenTabs } from '../simplemode/simpleMode';
+import { SkillStoreModal } from '../skillstore/SkillStoreModal';
 import { a4pT } from '../strings';
 
 /**
@@ -74,6 +75,15 @@ export class A4PSettingTab extends ClaudianSettingTab {
 
   private renderA4PTab(container: HTMLElement): void {
     new Setting(container).setName(a4pT('settings.heading')).setHeading();
+
+    new Setting(container)
+      .setName('🛍️ 스킬 스토어')
+      .setDesc('터미널 없이 스킬을 설치·업데이트·제거할 수 있어요.')
+      .addButton((button) => {
+        button.setButtonText('스토어 열기').setCta().onClick(() => {
+          new SkillStoreModal(this.app, this.plugin as A4PHost).open();
+        });
+      });
 
     new Setting(container)
       .setName('🩺 환경 진단')

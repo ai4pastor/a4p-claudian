@@ -111,6 +111,154 @@
   cursor: pointer;
 }
 
+/* --- Skill store modal --- */
+
+.a4p-store-modal {
+  width: min(560px, 90vw);
+}
+
+.a4p-store-loading,
+.a4p-store-empty {
+  padding: 2em 0;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.a4p-store-error {
+  padding: 1.5em 0;
+  text-align: center;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  align-items: center;
+}
+
+.a4p-store-offline {
+  padding: 0.4em 0.8em;
+  margin-bottom: 0.6em;
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+
+.a4p-store-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-bottom: 0.8em;
+}
+
+.a4p-store-category {
+  font-size: var(--font-ui-small);
+  padding: 0.2em 0.8em;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.a4p-store-category.is-active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.a4p-store-list {
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.a4p-store-card {
+  padding: 0.8em 0.4em;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.a4p-store-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+.a4p-store-card-name {
+  font-weight: 600;
+  font-size: var(--font-ui-medium);
+}
+
+.a4p-store-card-version {
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+
+.a4p-store-card-badge {
+  font-size: var(--font-ui-smaller);
+  padding: 0.05em 0.6em;
+  border-radius: 999px;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+}
+
+.a4p-store-card-badge--installed {
+  color: var(--text-success);
+}
+
+.a4p-store-card-badge--update-available {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.a4p-store-card-desc {
+  margin: 0.3em 0 0.5em;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+
+.a4p-store-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  align-items: center;
+}
+
+.a4p-store-button {
+  font-size: var(--font-ui-small);
+  padding: 0.25em 0.9em;
+  cursor: pointer;
+}
+
+.a4p-store-card-note {
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+
+.a4p-store-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.8em;
+}
+
+.a4p-store-footer-meta {
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+
+/* --- Welcome screen actions --- */
+
+.a4p-welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  justify-content: center;
+  margin-top: 1em;
+}
+
+.a4p-welcome-button {
+  font-size: var(--font-ui-small);
+  padding: 0.4em 1em;
+  border-radius: var(--radius-m);
+  cursor: pointer;
+}
+
 /* --- Simple mode: chat toolbar --- */
 /* Hide advanced toolbar controls; keep model selector, context meter,
    file/image context. Values are untouched — this is display-only. */

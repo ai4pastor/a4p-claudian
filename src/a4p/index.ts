@@ -10,6 +10,7 @@ import type { CompatVerdict } from './diagnostics/CompatGuard';
 import { detectCliVersion, evaluateCompat, fetchCompatManifest } from './diagnostics/CompatGuard';
 import { DiagnosticsModal } from './diagnostics/DiagnosticsModal';
 import { applySimpleModeToTab } from './simplemode/simpleMode';
+import { SkillStoreModal } from './skillstore/SkillStoreModal';
 import { A4PStore } from './store/A4PStore';
 import { a4pT } from './strings';
 import { setA4PTabDecorator } from './tabHook';
@@ -44,13 +45,13 @@ export async function installA4P(plugin: A4PHost): Promise<void> {
     await normalizeHiddenProviders(plugin);
     warnIfUpstreamEnabled(plugin);
 
-    setA4PTabDecorator({ decorateTab: (tab) => decorateTab(tab) });
+    setA4PTabDecorator({ decorateTab: (tab) => decorateTab(plugin, tab) });
     safeRegister(() => setA4PTabDecorator(null));
 
     registerCommands(plugin);
 
     // Tabs created before installA4P ran (e.g. restored layout) get decorated late.
-    forEachOpenTab(plugin, decorateTab);
+    forEachOpenTab(plugin, (tab) => decorateTab(plugin, tab));
 
     // Off the onload critical path: CLI compat guard + first-launch onboarding.
     const compatTimer = window.setTimeout(() => void runCompatGuard(plugin), COMPAT_GUARD_DELAY_MS);
@@ -61,9 +62,22 @@ export async function installA4P(plugin: A4PHost): Promise<void> {
   }
 }
 
-function decorateTab(tab: TabData): void {
+function decorateTab(plugin: A4PHost, tab: TabData): void {
   applySimpleModeToTab(tab, getA4PStore()?.get().simpleMode ?? true);
   syncCompatBanner(tab, compatVerdicts);
+  addWelcomeActions(plugin, tab);
+}
+
+/** Welcome-screen shortcuts — the main discovery funnel for the skill store. */
+function addWelcomeActions(plugin: A4PHost, tab: TabData): void {
+  const welcomeEl = tab.dom.welcomeEl;
+  if (!welcomeEl || welcomeEl.querySelector('.a4p-welcome-actions')) return;
+  const actions = welcomeEl.createDiv({ cls: 'a4p-welcome-actions' });
+  const storeButton = actions.createEl('button', {
+    cls: 'a4p-welcome-button',
+    text: '🛍️ 스킬 스토어 둘러보기',
+  });
+  storeButton.addEventListener('click', () => new SkillStoreModal(plugin.app, plugin).open());
 }
 
 function forEachOpenTab(plugin: A4PHost, action: (tab: TabData) => void): void {
@@ -81,6 +95,16 @@ function registerCommands(plugin: A4PHost): void {
     name: '🩺 환경 진단',
     callback: () => new DiagnosticsModal(plugin.app, plugin).open(),
   });
+  plugin.addCommand({
+    id: 'a4p-skill-store',
+    name: '🛍️ 스킬 스토어',
+    callback: () => new SkillStoreModal(plugin.app, plugin).open(),
+  });
+  if (typeof plugin.addRibbonIcon === 'function') {
+    plugin.addRibbonIcon('shopping-bag', 'A4P 스킬 스토어', () =>
+      new SkillStoreModal(plugin.app, plugin).open(),
+    );
+  }
 }
 
 /** Detects installed CLI versions and shows Korean guidance when out of the tested range. */
