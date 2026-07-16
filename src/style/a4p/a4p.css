@@ -242,6 +242,42 @@
   font-size: var(--font-ui-smaller);
 }
 
+/* --- Preset chips (above composer) --- */
+
+.a4p-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  padding: 0.3em 0.2em;
+}
+
+.a4p-chip {
+  font-size: var(--font-ui-smaller);
+  padding: 0.15em 0.7em;
+  border-radius: 999px;
+  cursor: pointer;
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  white-space: nowrap;
+}
+
+.a4p-chip:hover {
+  background: var(--background-modifier-hover);
+}
+
+.a4p-chip--locked {
+  opacity: 0.55;
+}
+
+/* --- Settings: preset list --- */
+
+.a4p-settings-note {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  margin-bottom: 0.5em;
+}
+
 /* --- Welcome screen actions --- */
 
 .a4p-welcome-actions {

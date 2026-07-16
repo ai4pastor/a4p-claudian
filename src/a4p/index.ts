@@ -9,6 +9,8 @@ import { syncCompatBanner } from './diagnostics/compatBanner';
 import type { CompatVerdict } from './diagnostics/CompatGuard';
 import { detectCliVersion, evaluateCompat, fetchCompatManifest } from './diagnostics/CompatGuard';
 import { DiagnosticsModal } from './diagnostics/DiagnosticsModal';
+import { attachPresetChips } from './presets/PresetChips';
+import { PresetManager } from './presets/PresetManager';
 import { applySimpleModeToTab } from './simplemode/simpleMode';
 import { SkillStoreModal } from './skillstore/SkillStoreModal';
 import { A4PStore } from './store/A4PStore';
@@ -21,6 +23,7 @@ export { getA4PStore } from './context';
 const COMPAT_GUARD_DELAY_MS = 3000;
 
 let compatVerdicts: CompatVerdict[] = [];
+let presetManager: PresetManager | null = null;
 
 type PluginManagerInternals = {
   plugins?: { enabledPlugins?: Set<string> };
@@ -45,6 +48,11 @@ export async function installA4P(plugin: A4PHost): Promise<void> {
     await normalizeHiddenProviders(plugin);
     warnIfUpstreamEnabled(plugin);
 
+    presetManager = new PresetManager(plugin);
+    safeRegister(() => {
+      presetManager = null;
+    });
+
     setA4PTabDecorator({ decorateTab: (tab) => decorateTab(plugin, tab) });
     safeRegister(() => setA4PTabDecorator(null));
 
@@ -66,6 +74,7 @@ function decorateTab(plugin: A4PHost, tab: TabData): void {
   applySimpleModeToTab(tab, getA4PStore()?.get().simpleMode ?? true);
   syncCompatBanner(tab, compatVerdicts);
   addWelcomeActions(plugin, tab);
+  if (presetManager) attachPresetChips(presetManager, tab);
 }
 
 /** Welcome-screen shortcuts — the main discovery funnel for the skill store. */

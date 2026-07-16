@@ -6,6 +6,8 @@ import { A4P_HIDDEN_PROVIDER_IDS } from '../config';
 import type { A4PHost } from '../context';
 import { getA4PStore } from '../context';
 import { DiagnosticsModal } from '../diagnostics/DiagnosticsModal';
+import { PresetEditModal } from '../presets/PresetEditModal';
+import { PresetManager } from '../presets/PresetManager';
 import { applySimpleModeToOpenTabs } from '../simplemode/simpleMode';
 import { SkillStoreModal } from '../skillstore/SkillStoreModal';
 import { a4pT } from '../strings';
@@ -20,6 +22,9 @@ import { a4pT } from '../strings';
  * changes, the worst case is an extra visible tab, never breakage.
  */
 export class A4PSettingTab extends ClaudianSettingTab {
+  /** Keeps the AI4Pastor tab selected across display() re-renders. */
+  private a4pTabActive = false;
+
   display(): void {
     super.display();
     try {
@@ -57,20 +62,24 @@ export class A4PSettingTab extends ClaudianSettingTab {
     });
     const a4pContent = containerEl.createDiv({ cls: 'claudian-settings-tab-content' });
 
-    a4pButton.addEventListener('click', () => {
+    const activateA4PTab = (): void => {
       for (const button of upstreamButtons) button.removeClass('claudian-settings-tab--active');
       for (const content of upstreamContents) content.removeClass('claudian-settings-tab-content--active');
       a4pButton.addClass('claudian-settings-tab--active');
       a4pContent.addClass('claudian-settings-tab-content--active');
-    });
+      this.a4pTabActive = true;
+    };
+    a4pButton.addEventListener('click', activateA4PTab);
     tabBar.addEventListener('click', (event) => {
       if (event.target !== a4pButton) {
         a4pButton.removeClass('claudian-settings-tab--active');
         a4pContent.removeClass('claudian-settings-tab-content--active');
+        this.a4pTabActive = false;
       }
     });
 
     this.renderA4PTab(a4pContent);
+    if (this.a4pTabActive) activateA4PTab();
   }
 
   private renderA4PTab(container: HTMLElement): void {
@@ -108,6 +117,86 @@ export class A4PSettingTab extends ClaudianSettingTab {
           });
       });
 
+    this.renderPresetSection(container);
+
     container.createDiv({ cls: 'a4p-settings-info', text: a4pT('settings.about') });
+  }
+
+  private renderPresetSection(container: HTMLElement): void {
+    new Setting(container).setName('⚡ 빠른 실행 버튼').setHeading();
+    container.createDiv({
+      cls: 'a4p-settings-note',
+      text: '채팅 입력창 위에 표시되는 버튼이에요. 순서를 바꾸거나 나만의 버튼을 만들 수 있어요.',
+    });
+
+    const manager = new PresetManager(this.plugin as A4PHost);
+    const listEl = container.createDiv({ cls: 'a4p-preset-list' });
+
+    const rerender = (): void => {
+      listEl.empty();
+      const presets = manager.getPresets();
+
+      presets.forEach((preset, index) => {
+        const row = new Setting(listEl).setName(preset.label);
+        row.setDesc(preset.kind === 'command' ? `명령: ${preset.commandId ?? ''}` : '프롬프트');
+        row.addExtraButton((button) => {
+          button.setIcon('arrow-up').setTooltip('위로').setDisabled(index === 0);
+          button.onClick(async () => {
+            const next = [...presets];
+            [next[index - 1], next[index]] = [next[index], next[index - 1]];
+            await manager.savePresets(next);
+            rerender();
+          });
+        });
+        row.addExtraButton((button) => {
+          button.setIcon('arrow-down').setTooltip('아래로').setDisabled(index === presets.length - 1);
+          button.onClick(async () => {
+            const next = [...presets];
+            [next[index], next[index + 1]] = [next[index + 1], next[index]];
+            await manager.savePresets(next);
+            rerender();
+          });
+        });
+        row.addExtraButton((button) => {
+          button.setIcon('pencil').setTooltip('수정');
+          button.onClick(() => {
+            new PresetEditModal(this.app, manager, preset, (updated) => {
+              void (async () => {
+                const next = presets.map((entry) => (entry.id === updated.id ? updated : entry));
+                await manager.savePresets(next);
+                rerender();
+              })();
+            }).open();
+          });
+        });
+        row.addExtraButton((button) => {
+          button.setIcon('trash').setTooltip('삭제');
+          button.onClick(async () => {
+            await manager.savePresets(presets.filter((entry) => entry.id !== preset.id));
+            rerender();
+          });
+        });
+      });
+
+      new Setting(listEl)
+        .addButton((button) => {
+          button.setButtonText('＋ 새 버튼').setCta().onClick(() => {
+            new PresetEditModal(this.app, manager, null, (created) => {
+              void (async () => {
+                await manager.savePresets([...manager.getPresets(), created]);
+                rerender();
+              })();
+            }).open();
+          });
+        })
+        .addButton((button) => {
+          button.setButtonText('기본값 복원').onClick(async () => {
+            await manager.restoreDefaults();
+            rerender();
+          });
+        });
+    };
+
+    rerender();
   }
 }
