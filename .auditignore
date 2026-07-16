@@ -1,0 +1,9 @@
+# github-privacy-audit 오탐 화이트리스트
+# 아래는 업스트림(yishentu/claudian, 공개 MIT 리포) 원본 파일 — 더미 테스트 값과 예시 경로만 포함.
+# 실제 시크릿·개인정보 아님 (예: 'secret-key', /Users/test/...)
+tests/unit/
+tests/integration/
+.env.local.example
+.npmrc
+README.md
+src/core/prompt/mainAgent.ts
