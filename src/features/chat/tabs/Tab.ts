@@ -1,6 +1,7 @@
 import type { Component } from 'obsidian';
 import { Notice, Platform } from 'obsidian';
 
+import { a4pOnTabUICreated } from '../../../a4p/tabHook';
 import { getHiddenProviderCommandSet } from '../../../core/providers/commands/hiddenCommands';
 import type { ProviderCommandDropdownConfig } from '../../../core/providers/commands/ProviderCommandCatalog';
 import type { ProviderCommandEntry } from '../../../core/providers/commands/ProviderCommandEntry';
@@ -1146,6 +1147,8 @@ export function initializeTabUI(
   });
   resizeObserver.observe(dom.messagesEl);
   dom.eventCleanups.push(() => resizeObserver.disconnect());
+
+  a4pOnTabUICreated(tab);
 }
 
 export interface ForkContext {

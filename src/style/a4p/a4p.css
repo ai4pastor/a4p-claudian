@@ -1,0 +1,27 @@
+/* ============================================
+   A4P layer styles — everything a4p-* lives here.
+   Simple-mode hiding is pure CSS on .a4p-simple.
+   ============================================ */
+
+/* --- Settings --- */
+
+.a4p-settings-info {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: 1px solid var(--background-modifier-border);
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+/* --- Simple mode: chat toolbar --- */
+/* Hide advanced toolbar controls; keep model selector, context meter,
+   file/image context. Values are untouched — this is display-only. */
+
+.a4p-simple .claudian-thinking-selector,
+.a4p-simple .claudian-service-tier-toggle,
+.a4p-simple .claudian-mcp-selector,
+.a4p-simple .claudian-permission-toggle,
+.a4p-simple .claudian-mode-selector,
+.a4p-simple .claudian-external-context-selector {
+  display: none !important;
+}
