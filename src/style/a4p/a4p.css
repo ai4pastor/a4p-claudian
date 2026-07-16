@@ -13,6 +13,104 @@
   font-size: var(--font-ui-smaller);
 }
 
+/* --- Diagnostics modal --- */
+
+.a4p-diag-modal .a4p-diag-loading {
+  padding: 2em 0;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.a4p-diag-row {
+  padding: 0.6em 0.2em;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.a4p-diag-row-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 600;
+}
+
+.a4p-diag-detail {
+  margin-top: 0.2em;
+  margin-left: 1.8em;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  word-break: break-all;
+}
+
+.a4p-diag-fixes {
+  margin: 0.4em 0 0.2em 1.8em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  align-items: center;
+}
+
+.a4p-diag-fix-button {
+  font-size: var(--font-ui-small);
+  padding: 0.2em 0.7em;
+  cursor: pointer;
+}
+
+.a4p-diag-note {
+  flex-basis: 100%;
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+
+.a4p-diag-footer {
+  margin-top: 1em;
+}
+
+.a4p-diag-summary {
+  margin-bottom: 0.5em;
+  color: var(--text-muted);
+}
+
+.a4p-diag-summary--ok {
+  color: var(--text-success);
+  font-weight: 600;
+}
+
+/* --- Compat warning banner --- */
+
+.a4p-compat-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 0.8em;
+  background: var(--background-modifier-error-hover, rgba(255, 100, 100, 0.15));
+  border-bottom: 1px solid var(--background-modifier-border);
+  font-size: var(--font-ui-small);
+}
+
+.a4p-compat-banner--untested-newer {
+  background: var(--background-modifier-message, rgba(255, 200, 80, 0.15));
+}
+
+.a4p-compat-banner-text {
+  flex: 1 1 auto;
+  min-width: 12em;
+}
+
+.a4p-compat-banner-hint {
+  flex-basis: 100%;
+  color: var(--text-muted);
+  font-family: var(--font-monospace);
+  font-size: var(--font-ui-smaller);
+  user-select: all;
+}
+
+.a4p-compat-banner-close {
+  font-size: var(--font-ui-smaller);
+  padding: 0.1em 0.6em;
+  cursor: pointer;
+}
+
 /* --- Simple mode: chat toolbar --- */
 /* Hide advanced toolbar controls; keep model selector, context meter,
    file/image context. Values are untouched — this is display-only. */

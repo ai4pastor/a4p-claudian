@@ -3,7 +3,9 @@ import { Setting } from 'obsidian';
 import { ProviderRegistry } from '../../core/providers/ProviderRegistry';
 import { ClaudianSettingTab } from '../../features/settings/ClaudianSettings';
 import { A4P_HIDDEN_PROVIDER_IDS } from '../config';
-import { getA4PStore } from '../index';
+import type { A4PHost } from '../context';
+import { getA4PStore } from '../context';
+import { DiagnosticsModal } from '../diagnostics/DiagnosticsModal';
 import { applySimpleModeToOpenTabs } from '../simplemode/simpleMode';
 import { a4pT } from '../strings';
 
@@ -72,6 +74,15 @@ export class A4PSettingTab extends ClaudianSettingTab {
 
   private renderA4PTab(container: HTMLElement): void {
     new Setting(container).setName(a4pT('settings.heading')).setHeading();
+
+    new Setting(container)
+      .setName('🩺 환경 진단')
+      .setDesc('Claude 설치·로그인·버전 호환성을 점검하고 해결 방법을 안내해 드려요.')
+      .addButton((button) => {
+        button.setButtonText('진단 열기').onClick(() => {
+          new DiagnosticsModal(this.app, this.plugin as A4PHost, {}).open();
+        });
+      });
 
     new Setting(container)
       .setName(a4pT('settings.simpleMode.name'))
